@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">app_extAPI</string>
+    <string name="pesquisaCep">Pesquisa CEP</string>
+    <string name="pesquisarCep">Pesquisar CEP</string>
+    <string name="inserirCep">Informe o CEP</string>
+    <string name="consultar">Consultar</string>
+    <string name="limpar">Limpar consulta</string>
+    <string name="rua">Rua:</string>
+    <string name="bairro">Bairro:</string>
+    <string name="cidade">Cidade:</string>
+    <string name="estado">Estado:</string>
+</resources>
