@@ -1,0 +1,227 @@
+<resources>
+    <string name="app_name">app_extAPI</string>
+    <string name="pesquisaCep">Pesquisa CEP</string>
+    <string name="pesquisarCep">Pesquisar CEP</string>
+    <string name="inserirCep">Informe o CEP</string>
+    <string name="consultar">Consultar</string>
+    <string name="limpar">Limpar consulta</string>
+    <string name="rua">Rua:</string>
+    <string name="bairro">Bairro:</string>
+    <string name="cidade">Cidade:</string>
+    <string name="estado">Estado:</string>
+</resources>
+
+
+package com.example.app_extapi;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText cep;
+    Button search, clear;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Var
+        cep = findViewById(R.id.infoCep);
+        search = findViewById(R.id.pesquisar);
+        clear = findViewById(R.id.limpar);
+
+    }
+}
+
+
+
+
+
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.app_extapi'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.app_extapi"
+        minSdk 23
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.android, volley:volley:1;2;1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+
+
+
+package com.example.app_extapi;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText i_cep;
+
+    TextView tv_street, tv_neighborhood, tv_city, tv_state;
+    Button btnSearch, btnClear;
+
+    String cep, url;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Var
+        btnSearch = findViewById(R.id.pesquisar);
+        btnClear = findViewById(R.id.limpar);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (i_cep.getText().length() != 8) {
+                    i_cep.setError("Insert a valid cep");
+                } else {
+                    cep = i_cep.getText().toString();
+                    url = "https://brasilapi.com.br/api/cep/v1/"+cep+"json";
+                    search(url);
+                }
+            }
+        });
+    }
+
+    //btnClear.onClickLis
+
+    public void search(String url) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(
+                Request.Method.GET,
+                url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("test", response);
+                try {
+                    JSONObject street = new JSONObject(response);
+                    JSONObject city = new JSONObject(response);
+                    JSONObject street = new JSONObject(response);
+                    JSONObject street = new JSONObject(response);
+
+                    tv_street.setText("Rua" + street.getString("street"));
+                    tv_city.setText("Cidade" + city.getString("city"));
+                    tv_neighborhood.setText("Bairro" + street.getString("neighborhood"));
+                    tv_state.setText("Estado" + street.getString("estate"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }, new Response.ErrorListener()
+            {@Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }
+        );
+    }
+
+    public void cleanEdt() {
+        i_cep.setText("");
+    }
+
+}
+
+
+
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.app_extapi'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.app_extapi"
+        minSdk 23
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.android.volley:volley:1.2.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
