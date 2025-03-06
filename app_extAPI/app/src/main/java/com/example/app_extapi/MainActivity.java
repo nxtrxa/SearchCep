@@ -34,9 +34,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Var
+        i_cep = findViewById(R.id.infoCep);
         btnSearch = findViewById(R.id.pesquisar);
         btnClear = findViewById(R.id.limpar);
+        tv_city = findViewById(R.id.cidade);
+        tv_street = findViewById(R.id.rua);
+        tv_neighborhood = findViewById(R.id.bairro);
+        tv_state = findViewById(R.id.estado);
+
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,14 +50,19 @@ public class MainActivity extends AppCompatActivity {
                     i_cep.setError("Insert a valid cep");
                 } else {
                     cep = i_cep.getText().toString();
-                    url = "https://brasilapi.com.br/api/cep/v1/"+cep+"json";
+                    url = "https://brasilapi.com.br/api/cep/v1/"+cep;
                     search(url);
                 }
             }
         });
-    }
 
-    //btnClear.onClickLis
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearEdt();
+            }
+        });
+    }
 
     public void search(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -64,14 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("test", response);
                 try {
                     JSONObject street = new JSONObject(response);
-                    JSONObject city = new JSONObject(response);
-                    JSONObject street = new JSONObject(response);
-                    JSONObject street = new JSONObject(response);
+
 
                     tv_street.setText("Rua" + street.getString("street"));
-                    tv_city.setText("Cidade" + city.getString("city"));
+                    tv_city.setText("Cidade" + street.getString("city"));
                     tv_neighborhood.setText("Bairro" + street.getString("neighborhood"));
-                    tv_state.setText("Estado" + street.getString("estate"));
+                    tv_state.setText("Estado" + street.getString("state"));
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -84,10 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
+        queue.add(strReq);
     }
 
-    public void cleanEdt() {
-        i_cep.setText("");
-    }
+    public void clearEdt() { i_cep.setText(""); }
 
 }
